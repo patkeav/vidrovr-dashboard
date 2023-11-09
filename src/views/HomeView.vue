@@ -10,7 +10,8 @@
           <v-card
             class="home-grid-item mx-auto flex-grow-1 d-flex flex-column"
             max-width="344"
-            color="secondary">
+            color="secondary"
+            :to="`/asset-detail/${a.id}`">
             <v-card-item>
               <div>
                 <img
@@ -36,7 +37,7 @@
                 size="x-large"
                 variant="flat"
                 append-icon="mdi-arrow-right"
-                :to="'/'">
+                :to="`/asset-detail/${a.id}`">
                 See detail
               </v-btn>
             </v-card-actions>
@@ -50,36 +51,11 @@
 import GridLoading from '@/loaders/GridLoading.vue';
 import API from '@/api/API.const';
 import HELPERS from '@/helpers/helpers.const';
+import { type AssetPreview } from '@/models/Asset.model';
 import { onMounted, ref } from 'vue';
 import type { Ref } from 'vue';
 import type { AxiosResponse } from 'axios';
 import { computed } from 'vue';
-
-interface Asset {
-  id: string;
-  mime_type: string;
-  feed_id: string;
-  creation_date: string;
-  title: string;
-  thumbnail: string;
-  media_url: string;
-  height: number;
-  width: number;
-  duration: number;
-  fps: number;
-  processing_info: {
-    status: string;
-    start: string;
-    end: string;
-  };
-}
-
-interface AssetPreview {
-  id: string;
-  creation_date: string;
-  title: string;
-  thumbnail: string;
-}
 
 const loading = ref(true);
 const assetPreviews: Ref<AssetPreview[]> = ref([]);
