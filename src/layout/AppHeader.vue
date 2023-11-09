@@ -9,18 +9,22 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawer">
       <v-list>
-        <v-list-item title="All Assets" subtitle="Vuetify" :to="'/'"></v-list-item>
+        <v-list-item
+          title="All Assets"
+          subtitle="Assets"
+          :to="'/'"
+        ></v-list-item>
         <v-divider></v-divider>
       </v-list>
     </v-navigation-drawer>
   </v-layout>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const drawer = ref(false)
+const drawer = ref(false);
 
 const toggleNav = () => {
-  drawer.value = !drawer.value
-}
+  drawer.value = !drawer.value;
+};
 </script>
