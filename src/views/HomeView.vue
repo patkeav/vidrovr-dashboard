@@ -51,7 +51,7 @@
 import GridLoading from '@/loaders/GridLoading.vue';
 import API from '@/api/API.const';
 import HELPERS from '@/helpers/helpers.const';
-import { type AssetPreview } from '@/models/Asset.model';
+import { type Asset, type AssetPreview } from '@/models/Asset.model';
 import { onMounted, ref } from 'vue';
 import type { Ref } from 'vue';
 import type { AxiosResponse } from 'axios';
@@ -75,9 +75,12 @@ const sortedAssetPreviews = computed(() => {
 const getAssets = async () => {
   try {
     const assets: AxiosResponse<{ data: string[] }> = await API.get_assets();
-    const previews: AxiosResponse<{ data: AssetPreview[] }> =
-      await API.get_asset_previews(assets.data.data);
-    assetPreviews.value = previews.data.data;
+    const promises = assets.data.data.map((a) => API.get_asset_detail(a));
+    const resolved: AxiosResponse<{ data: Asset }>[] =
+      await Promise.all(promises);
+    assetPreviews.value = resolved.map(
+      (r: AxiosResponse<{ data: Asset }>) => r.data.data
+    );
   } catch (error) {
     console.error(error);
   } finally {

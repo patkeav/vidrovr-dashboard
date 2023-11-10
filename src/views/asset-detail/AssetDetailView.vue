@@ -3,37 +3,44 @@
     <DetailLoading :isLoading="loading" />
 
     <div v-if="!loading">
-      <v-card elevation="6">
+      <v-card elevation="6" class="pa-4 my-4" color="white">
         <v-card-item>
+          <div
+            class="asset-title text-h4 pb-6 mb-6"
+            v-text="`Title: ${asset.title}`"></div>
           <HeroAsset
             :mediaUrl="asset.media_url"
             :thumbnail="asset.thumbnail"
             :height="asset.height"
             :width="asset.width"
             :assetMaxWidth="assetMaxWidth" />
-          <div class="text-h4 mt-6" v-text="`Title: ${asset.title}`"></div>
-          <div class="my-4">
-            <div class="text-h6 mt-6 mb-3">Detections per person:</div>
-            <DetectionAggregate
-              :detections="detectedPersonCount"
-              v-if="detectedPersonLength" />
-          </div>
+          <HeroMeta
+            :created="formatDate(asset.creation_date)"
+            :duration="formatDuration(asset.duration)" />
         </v-card-item>
       </v-card>
-      <DetectionChart
-        :detections="detectedPersonCount"
-        v-if="detectedPersonLength" />
-      <v-progress-circular
-        model-value="20"
-        v-if="!detectedPersonLength"></v-progress-circular>
-      <v-card elevation="6">
+      <v-card class="pa-4 my-4" color="white">
         <v-card-item>
-          <div class="text-h4 mt-6">Detected persons with Thumbnails</div>
+          <DetectionChart
+            :detections="detectedPersonCount"
+            v-if="detectedPersonLength" />
+          <v-progress-circular
+            model-value="20"
+            v-if="!detectedPersonLength"></v-progress-circular>
+        </v-card-item>
+      </v-card>
+      <v-card elevation="6" class="pa-4 my-4" color="white">
+        <v-card-item>
+          <div class="asset-title text-h4 pb-6 mb-6">
+            Detected persons with Thumbnails
+          </div>
 
           <v-data-table
             :items="detectedPersonThumbs"
             v-if="!personLoading"
-            class="asset-detections">
+            class="asset-detections v-theme--light"
+            color="white"
+            light>
             <template v-slot:item.thumbnails="{ value }">
               <img
                 :src="v"
@@ -52,7 +59,7 @@ import { ref } from 'vue';
 import API from '@/api/API.const';
 import DetailLoading from '@/loaders/DetailLoading.vue';
 import HeroAsset from './HeroAsset.vue';
-import DetectionAggregate from './DetectionAggregate.vue';
+import HeroMeta from './HeroMeta.vue';
 import DetectionChart from './DetectionChart.vue';
 import { type Asset } from '@/models/Asset.model';
 import type { AxiosResponse } from 'axios';
@@ -60,6 +67,7 @@ import { onMounted } from 'vue';
 import type { Ref } from 'vue';
 import type { Person } from '@/models/Person.model';
 import { computed } from 'vue';
+import HELPERS from '@/helpers/helpers.const';
 
 const props = defineProps<{ uid: string }>();
 
@@ -73,6 +81,9 @@ const assetMaxWidth = ref(0);
 const asset: Ref<Asset> = ref(<Asset>{});
 
 const persons: Ref<Person[]> = ref([]);
+
+const formatDate = HELPERS.formatDate;
+const formatDuration = HELPERS.formatDuration;
 
 const getAssetDetail = async () => {
   try {
@@ -99,7 +110,7 @@ const getPersonInfo = async () => {
 };
 
 onMounted(() => {
-  assetMaxWidth.value = document.getElementById('asset')!.offsetWidth - 50;
+  assetMaxWidth.value = document.getElementById('asset')!.offsetWidth - 64; // padding around card;
   getAssetDetail();
   getPersonInfo();
 });
@@ -147,7 +158,7 @@ const detectedPersonCount = computed(() => {
       });
     }
   });
-  return detectionCount;
+  return detectionCount.sort((a, b) => b.count - a.count);
 });
 
 const detectedPersonLength = computed(() => {
@@ -155,6 +166,9 @@ const detectedPersonLength = computed(() => {
 });
 </script>
 <style lang="scss" scoped>
+.asset-title {
+  border-bottom: 1px solid #ccc;
+}
 .detection-image {
   border: 1px solid #fff;
   border-radius: 5px;

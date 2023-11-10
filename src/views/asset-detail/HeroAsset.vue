@@ -1,17 +1,23 @@
 <template>
   <div
-    class="hero"
+    :class="`hero ${mediaLoaded && 'hero-loaded'}`"
     :style="`height: ${height}px; width: ${
       width > assetMaxWidth ? assetMaxWidth : width
     }px;`">
     <div class="hero-thumb" @click="loadMedia()">
       <img :src="thumbnail" alt="Asset Thumbnail" class="hero-thumb-img" />
-      <v-icon icon="mdi-play" size="50" class="hero-thumb-icon"></v-icon>
+      <v-icon
+        icon="mdi-play"
+        size="50"
+        class="hero-thumb-icon"
+        color="white"></v-icon>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
 const props = defineProps<{
   mediaUrl: string;
   thumbnail: string;
@@ -22,7 +28,10 @@ const props = defineProps<{
 
 const { mediaUrl, thumbnail, height, width, assetMaxWidth } = props;
 
+const mediaLoaded = ref(false);
+
 const loadMedia = () => {
+  mediaLoaded.value = true;
   document.querySelector('.hero-thumb')!.innerHTML = `
     <video width="${
       width > assetMaxWidth ? assetMaxWidth : width
@@ -39,6 +48,12 @@ const loadMedia = () => {
   position: relative;
   padding: 5px;
   overflow: hidden;
+  background: url('../../assets/thumbnail-preview.jpeg') no-repeat;
+  background-size: cover;
+  &.hero-loaded {
+    background: transparent;
+    border: 0;
+  }
 }
 .hero-thumb {
   display: block;

@@ -1,29 +1,32 @@
 <template>
   <v-layout>
-    <v-app-bar color="primary-darken-1">
-      <template v-slot:prepend>
-        <v-app-bar-nav-icon @click="toggleNav"></v-app-bar-nav-icon>
-      </template>
-
-      <v-app-bar-title>Vidrovr Dashboard</v-app-bar-title>
+    <v-app-bar color="deep-purple">
+      <router-link to="/" class="app-link px-4">
+        <v-app-bar-title>
+          <span v-text="title"></span>
+        </v-app-bar-title>
+      </router-link>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer">
-      <v-list>
-        <v-list-item
-          title="All Assets"
-          subtitle="Assets"
-          :to="'/'"></v-list-item>
-        <v-divider></v-divider>
-      </v-list>
-    </v-navigation-drawer>
   </v-layout>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-const drawer = ref(false);
+const route = useRoute();
 
-const toggleNav = () => {
-  drawer.value = !drawer.value;
+const nameMapping: { [key: string]: string } = {
+  home: 'Dashboard',
+  assetDetail: 'Metadata Inspector'
 };
+
+const title = computed(() => {
+  const name = String(route.name);
+  return `Vidrovr - ${name ? nameMapping[name] : 'Dashboard'}`;
+});
 </script>
+<style lang="scss" scoped>
+.app-link {
+  color: #fff;
+}
+</style>
