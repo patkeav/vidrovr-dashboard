@@ -20,6 +20,9 @@
           </div>
         </v-card-item>
       </v-card>
+      <DetectionChart
+        :detections="detectedPersonCount"
+        v-if="detectedPersonLength" />
       <v-card elevation="6">
         <v-card-item>
           <div class="text-h4 mt-6">Detected persons with Thumbnails</div>
@@ -47,6 +50,7 @@ import API from '@/api/API.const';
 import DetailLoading from '@/loaders/DetailLoading.vue';
 import HeroAsset from './HeroAsset.vue';
 import DetectionAggregate from './DetectionAggregate.vue';
+import DetectionChart from './DetectionChart.vue';
 import { type Asset } from '@/models/Asset.model';
 import type { AxiosResponse } from 'axios';
 import { onMounted } from 'vue';
