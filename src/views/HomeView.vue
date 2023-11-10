@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <GridLoading :isLoading="loading" :maxGrid="3" />
-    <v-container fluid>
+    <GridLoading :is-loading="loading" :max-grid="3" />
+    <v-container v-if="!error" fluid>
       <v-row>
         <v-col
-          class="home-grid d-flex flex-column"
           v-for="a in sortedAssetPreviews"
-          :key="a.id">
+          :key="a.id"
+          class="home-grid d-flex flex-column">
           <v-card
             class="home-grid-item mx-auto flex-grow-1 d-flex flex-column"
             max-width="344"
@@ -45,6 +45,17 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-container v-if="error">
+      <v-banner
+        lines="two"
+        icon="mdi-weather-hurricane"
+        color="error"
+        class="my-4">
+        <v-banner-text>
+          We're sorry, but something went wrong. Please try again later.
+        </v-banner-text>
+      </v-banner>
+    </v-container>
   </div>
 </template>
 <script setup lang="ts">
@@ -58,11 +69,17 @@ import type { AxiosResponse } from 'axios';
 import { computed } from 'vue';
 
 const loading = ref(true);
+const error = ref('');
 const assetPreviews: Ref<AssetPreview[]> = ref([]);
 
 const formatTitle = HELPERS.formatTitle;
 const formatDate = HELPERS.formatDate;
 
+/**
+ * Computed function: Returns a sorted array of assets in ascending by creation_date
+ *
+ * @returns {Asset[]}
+ */
 const sortedAssetPreviews = computed(() => {
   const assets = assetPreviews.value;
   return assets.sort((a: AssetPreview, b: AssetPreview) => {
@@ -72,6 +89,11 @@ const sortedAssetPreviews = computed(() => {
   });
 });
 
+/**
+ * Gets the available assets from the API, then gets each asset's details from the API and sets it to ref() var
+ *
+ * @returns {void}
+ */
 const getAssets = async () => {
   try {
     const assets: AxiosResponse<{ data: string[] }> = await API.get_assets();
@@ -81,8 +103,8 @@ const getAssets = async () => {
     assetPreviews.value = resolved.map(
       (r: AxiosResponse<{ data: Asset }>) => r.data.data
     );
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    error.value = (err as Error).message;
   } finally {
     loading.value = false;
   }

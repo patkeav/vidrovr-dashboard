@@ -1,17 +1,18 @@
-const express = require('express');
-
+import express from 'express';
+import cors from 'cors';
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
-const assets = require('./data/assets.json');
-const assetDetails = require('./data/asset-details.json');
-const persons = require('./data/persons.json');
+
+import assets from './data/assets.json' assert { type: 'json' };
+import assetDetails from './data/asset-details.json' assert { type: 'json' };
+import persons from './data/persons.json' assert { type: 'json' };
 
 const api = express();
 const apiPort = 5678;
 // enable cors from localhost:appPort
 const appPort = 5173;
-const cors = require('cors');
+
 const corsOptions = {
   origin: `http://localhost:${appPort}`,
   credentials: true
@@ -61,7 +62,7 @@ api.listen(apiPort, () => {
 });
 
 // log errors to the console
-api.use((err, req, res, next) => {
+api.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });

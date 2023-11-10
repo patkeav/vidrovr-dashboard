@@ -50,6 +50,12 @@ onMounted(() => {
   });
 });
 
+/**
+ * Sets a random color based on count
+ *
+ * @param {number} count the number of times the person was detected
+ * @returns {string}
+ */
 const getSectionColor = (count: number) => {
   const rand = Math.floor(Math.random() * 2);
   if (count > 3) {

@@ -30,6 +30,13 @@ const { mediaUrl, thumbnail, height, width, assetMaxWidth } = props;
 
 const mediaLoaded = ref(false);
 
+/**
+ * Loads the video and sets width/height
+ *
+ * NOTE: if video is larger than available space, set video width to match available space in the window
+ *
+ * @returns {{name: string, thumbnails: string[]}[]}
+ */
 const loadMedia = () => {
   mediaLoaded.value = true;
   document.querySelector('.hero-thumb')!.innerHTML = `
