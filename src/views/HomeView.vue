@@ -2,7 +2,7 @@
   <div class="home">
     <GridLoading :is-loading="loading" :max-grid="3" />
     <v-container v-if="!error" fluid>
-      <h1 class="mb-6" v-if="!loading">Available assets</h1>
+      <h1 v-if="!loading" class="mb-6">Available assets</h1>
       <v-row>
         <v-col
           v-for="a in sortedAssetPreviews"
