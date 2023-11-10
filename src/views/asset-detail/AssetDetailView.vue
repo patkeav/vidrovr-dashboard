@@ -11,7 +11,13 @@
             :height="asset.height"
             :width="asset.width"
             :assetMaxWidth="assetMaxWidth" />
-          <div class="text-h6 mt-6" v-text="`Title: ${asset.title}`"></div>
+          <div class="text-h4 mt-6" v-text="`Title: ${asset.title}`"></div>
+          <div class="my-4">
+            <div class="text-h6 mt-6 mb-3">Detections per person:</div>
+            <DetectionAggregate
+              :detections="detectedPersonCount"
+              v-if="detectedPersonLength" />
+          </div>
         </v-card-item>
       </v-card>
       <v-card elevation="6">
@@ -40,6 +46,7 @@ import { ref } from 'vue';
 import API from '@/api/API.const';
 import DetailLoading from '@/loaders/DetailLoading.vue';
 import HeroAsset from './HeroAsset.vue';
+import DetectionAggregate from './DetectionAggregate.vue';
 import { type Asset } from '@/models/Asset.model';
 import type { AxiosResponse } from 'axios';
 import { onMounted } from 'vue';
@@ -65,7 +72,6 @@ const getAssetDetail = async () => {
     const assetResponse: AxiosResponse<{ data: Asset }> =
       await API.get_asset_detail(uid);
     asset.value = assetResponse.data.data;
-    console.table(assetResponse.data.data);
   } catch (error) {
     console.error(error);
   } finally {
@@ -78,7 +84,6 @@ const getPersonInfo = async () => {
     const personResponse: AxiosResponse<{ data: Person[] }> =
       await API.get_person_info(uid);
     persons.value = personResponse.data.data;
-    console.table(personResponse.data.data);
   } catch (error) {
     console.error(error);
   } finally {
@@ -112,6 +117,34 @@ const detectedPersonThumbs = computed(() => {
   });
 
   return compiledDetections;
+});
+
+const detectedPersonCount = computed(() => {
+  const detections: Person[] = persons.value;
+  const detectionCount: { name: string; count: number }[] = [];
+  detections.forEach((current) => {
+    const index = detectionCount.findIndex((p) => p.name === current.name);
+    if (index > -1) {
+      const counts =
+        detectionCount[index].count +
+        current.appearances.reduce((accumulator) => (accumulator += 1), 0);
+
+      detectionCount[index].count = counts;
+    } else {
+      detectionCount.push({
+        name: current.name,
+        count: current.appearances.reduce(
+          (accumulator) => (accumulator += 1),
+          0
+        )
+      });
+    }
+  });
+  return detectionCount;
+});
+
+const detectedPersonLength = computed(() => {
+  return detectedPersonCount.value.length > 0;
 });
 </script>
 <style lang="scss" scoped>
