@@ -15,5 +15,8 @@ export default {
     },
     get_asset_detail: (asset_uid: string) => {
         return axios.get(`${API_URL}/assets/${asset_uid}`);
+    },
+    get_person_info: (asset_uid: string) => {
+        return axios.get(`${API_URL}/assets/${asset_uid}/persons`);
     }
 };

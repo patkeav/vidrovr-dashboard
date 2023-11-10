@@ -32,7 +32,6 @@ const loadMedia = () => {
     </video>
 `;
 };
-console.log(mediaUrl);
 </script>
 <style lang="scss" scoped>
 .hero {
