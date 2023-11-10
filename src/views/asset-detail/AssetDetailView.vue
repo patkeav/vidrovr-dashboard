@@ -2,7 +2,7 @@
   <div id="asset">
     <DetailLoading :isLoading="loading" />
 
-    <template v-if="!loading">
+    <div v-if="!loading">
       <v-card elevation="6">
         <v-card-item>
           <HeroAsset
@@ -23,6 +23,9 @@
       <DetectionChart
         :detections="detectedPersonCount"
         v-if="detectedPersonLength" />
+      <v-progress-circular
+        model-value="20"
+        v-if="!detectedPersonLength"></v-progress-circular>
       <v-card elevation="6">
         <v-card-item>
           <div class="text-h4 mt-6">Detected persons with Thumbnails</div>
@@ -41,7 +44,7 @@
           </v-data-table>
         </v-card-item>
       </v-card>
-    </template>
+    </div>
   </div>
 </template>
 <script setup lang="ts">

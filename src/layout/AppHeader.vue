@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-app-bar color="primary-darken-1" density="compact">
+    <v-app-bar color="primary-darken-1">
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click="toggleNav"></v-app-bar-nav-icon>
       </template>
@@ -12,8 +12,7 @@
         <v-list-item
           title="All Assets"
           subtitle="Assets"
-          :to="'/'"
-        ></v-list-item>
+          :to="'/'"></v-list-item>
         <v-divider></v-divider>
       </v-list>
     </v-navigation-drawer>

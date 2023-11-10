@@ -4,9 +4,20 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  min-height: 75vh;
+  min-height: 50vh;
   font-weight: normal;
   width: 100%;
+}
+
+.v-layout,
+.v-navigation-drawer__contentclass,
+.v-navigation-drawer
+  .v-navigation-drawer--left
+  .v-navigation-drawer--temporary
+  .v-navigation-drawer--active
+  .v-theme--dark
+  .v-navigation-drawer--mobile {
+  min-height: 64px; /* odd bug with vuetify header disappearing */
 }
 
 a,
