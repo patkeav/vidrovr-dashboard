@@ -13,8 +13,9 @@ If you have `nvm`, you can use `nvm use` in the project root to switch to the co
 ```sh
 npm install
 ```
+**Note: Run the next two commands in separate terminal tabs to see the working app**
 
-### Node server (required for API calls)
+### Node server 
 
 ```sh
 npm run server
