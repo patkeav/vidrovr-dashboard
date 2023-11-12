@@ -14,16 +14,16 @@ If you have `nvm`, you can use `nvm use` in the project root to switch to the co
 npm install
 ```
 
-### Compile Client code and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
 ### Node server (required for API calls)
 
 ```sh
 npm run server
+```
+
+### Compile Client code and Hot-Reload for Development
+
+```sh
+npm run dev
 ```
 
 ### Type-Check, Compile and Minify for Production
